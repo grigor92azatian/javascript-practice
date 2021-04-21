@@ -1561,3 +1561,115 @@ function formatDuration (seconds) {
 }
 
 */
+
+// function zeros (n) {
+//     let numArr = [];
+//     let multTens = [];
+//     let multTwoAndFive = [];
+//     let result;
+
+//     for(let i=1;i<=n;i++){
+//         numArr.push(i);
+//     }
+//     multTwoAndFive = numArr.filter(function(number){
+//         if((number%2===0&&number%10!==0)||(number%5===0&&number%10!==0)){
+//             return number;
+//         }
+//     });
+//     multTens = numArr.filter(function(number){
+//         if(number%10===0){
+//             return number;
+//         }
+//     });
+//     for(let i=0;i<multTwoAndFive.length;i++){
+//         if(multTwoAndFive[i]%5===0){
+//             multTens.push(multTwoAndFive[i-1]*multTwoAndFive[i]);
+//         }
+//     }
+//     // //test
+//     // multTens = multTens.map(function(num){return num/10});
+//     // multTwoAndFive = multTens.filter(function(number){
+//     //     if((number%2===0&&number%10!==0)||(number%5===0&&number%10!==0)){
+//     //         return number;
+//     //     }
+//     // });
+//     // multTens = multTens.filter(function(number){
+//     //     if(number%10===0){
+//     //         return number;
+//     //     }
+//     // });
+//     // //test
+//     result = multTens.reduce(function(acc,curr){
+//         return acc*curr;
+//     },1);
+//     // .toString().split("").filter(function(digit){
+//     //     if(digit==="0"){
+//     //         return digit;
+//     //     }
+//     // }).length;
+
+//     console.log(multTwoAndFive);
+//     console.log(multTens);
+//     console.log(result);
+//     return result;
+// }
+
+
+// function zeros(number){ //-----------------------REVISIT THIS ONE ON CODEWARS(Number of trailing zeros of N!)-----------------
+//     let allNums = [];
+//     let tens;
+//     let fives;
+//     let twos;
+//     let numZeros = 0;
+// //SET-UP-------------------------------------
+//     for(let i=1;i<=number;i++){     //get array of all numbers from 1 til "number"
+//         allNums.push(i);
+//     }
+
+// let loopThrough=1;
+// do{
+//     tens = [];
+//     fives = [];
+//     twos = [];
+//     for(let i=allNums.length-1;i>-1;i--){   //get array of multiples of 10
+//         if(allNums[i]%10===0){
+//             tens.unshift(allNums[i]);
+//             allNums.splice(i,1);
+//         }
+//     }
+//     for(let i=allNums.length-1;i>-1;i--){   //get array of multiples of 5
+//         if(allNums[i]%5===0){
+//             fives.push(allNums[i]);
+//             allNums.splice(i,1);
+//         }
+//     }
+//     for(let i=allNums.length-1;i>-1;i--){   //get array of multiples of 2
+//         if(allNums[i]%2===0){
+//             twos.unshift(allNums[i]);
+//             allNums.splice(i,1);
+//         }
+//     }
+//     let loopLength = fives.length;
+//     for(let i=0;i<loopLength;i++){          //get multiples of 10 by multiplying each element in fives to corresponding element in twos
+//         let j=0;
+//         tens.push(fives[j]*twos[j]);
+//         fives.splice(j,1);
+//         twos.splice(j,1);
+//     }
+//     numZeros += tens.length;
+//     allNums = [...tens];
+//     loopThrough++;
+// }while(loopThrough<5)
+// //START------------------------------------------------only working with the tens array now
+
+//     // console.log(numZeros);
+//     // console.log(tens);
+
+// }
+
+// zeros(1000);
+// //console.log(zeros(100));
+
+
+
+
