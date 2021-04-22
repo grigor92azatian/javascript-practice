@@ -531,33 +531,7 @@ function repeateUntilCorrect(){
     console.log("Thank you! You entered: "+userInputNumber);
 }
 
-function outputListOfPrimeNumbers(start,end){   //function that returns a list of all prime numbers between start and end
-    function checkIfPrime(num){                 //function that returns true if number is prime, and false if number is not prime
-        let numIsPrime;
-        if(num==1||num==2){
-            numIsPrime = true;                  //if num is 1 or 2, return true (it is prime)
-        }else{
-            for(let i=2;i<num;i++){
-                if(num%i==0){
-                    numIsPrime = false;         //if num is divisible by any number before it equally (no remainder), then num is automatically NOT PRIME
-                    break;
-                }else{
-                    numIsPrime = true;
-                }
-            }
-        }
-        return numIsPrime;
-    }
-    let listOfPrimes="";                        //declare blank string to store final list
 
-    for(let i=start;i<=end;i++){                //loop through all numbers between start and end inclusive
-        if(checkIfPrime(i)){
-            listOfPrimes+=i+", ";               //if the current number is prime, add it to the list
-        }
-    }
-    listOfPrimes = listOfPrimes.slice(0,listOfPrimes.length-2);     //slice the list to remove the tail ", "
-    return listOfPrimes;
-}
 
 
 const repeatString = function(string, num) {
@@ -1560,7 +1534,7 @@ function formatDuration (seconds) {
     }
 }
 
-*/
+
 
 // function zeros (n) {
 //     let numArr = [];
@@ -1669,6 +1643,96 @@ function formatDuration (seconds) {
 
 // zeros(1000);
 // //console.log(zeros(100));
+
+
+
+function outputListOfPrimeNumbers(start,end){   //function that returns a list of all prime numbers between start and end
+    function checkIfPrime(num){                 //function that returns true if number is prime, and false if number is not prime
+        let numIsPrime;
+        if(num==1||num==2){
+            numIsPrime = true;                  //if num is 1 or 2, return true (it is prime)
+        }else{
+            for(let i=2;i<num;i++){
+                if(num%i==0){
+                    numIsPrime = false;         //if num is divisible by any number before it equally (no remainder), then num is automatically NOT PRIME
+                    break;
+                }else{
+                    numIsPrime = true;
+                }
+            }
+        }
+        return numIsPrime;
+    }
+    let listOfPrimes=[];                        //declare blank string to store final list
+
+    for(let i=start;i<=end;i++){                //loop through all numbers between start and end inclusive
+        if(checkIfPrime(i)){
+            listOfPrimes.push(i);               //if the current number is prime, add it to the list
+        }
+    }
+    //listOfPrimes = listOfPrimes.slice(0,listOfPrimes.length-2);     //slice the list to remove the tail ", "
+    return listOfPrimes;
+}
+
+function factorize(ourNum){
+    if(ourNum<0){
+        ourNum*=-1;
+    }
+    let primeArr = outputListOfPrimeNumbers(2,ourNum);
+    let factorization = [];
+
+    while(ourNum > 1){
+        for(let i=0;i<primeArr.length;i++){
+            if(ourNum===1){
+                break;
+            }
+            if(ourNum%primeArr[i]===0){
+                factorization.push(primeArr[i]);
+                ourNum = ourNum/primeArr[i];
+            }
+        }
+    }
+    return factorization;
+}
+
+function sumOfDivided(lst) {
+    let objArr = lst.map(function(number){
+        let factorization = factorize(number);
+        return {
+            value: number,
+            factors: factorization
+        };
+    });
+    let sharedPrimeFactors = []
+
+    objArr.forEach(obj => {
+        sharedPrimeFactors = sharedPrimeFactors.concat(obj.factors);
+    });
+    sharedPrimeFactors = [...new Set(sharedPrimeFactors)].map(function(elem){
+        return [elem,0];
+    }).sort(function(arr1,arr2){
+        if(arr1[0]>arr2[0]){
+            return 1;
+        }if(arr1[0]<arr2[0]){
+            return -1;
+        }
+    });
+
+    sharedPrimeFactors.forEach(array => {
+        let sum = 0;
+        objArr.forEach(obj => {
+            if(obj.factors.includes(array[0])){
+                sum+=obj.value;
+            }
+        });
+        array[1]=sum;
+    });
+
+    return sharedPrimeFactors;
+}
+
+*/
+
 
 
 
