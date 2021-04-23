@@ -1731,9 +1731,75 @@ function sumOfDivided(lst) {
     return sharedPrimeFactors;
 }
 
-*/
+
+
+//-------------------REVISIT: Recover a secret string from random triplets-------------------------------------
+function recoverSecret (triplets){                  //given an array of triplets, return the secret word
+    let secretWord = [...triplets[0]];
+    triplets.splice(0,1);
+
+    let uniqueChars = [];
+    triplets.forEach(element => {
+        uniqueChars = uniqueChars.concat(element);
+    });
+    const wordLength = [...new Set(uniqueChars)].length;        //since the secret word is composed of unique chars (no duplicates), 
+                                                    //I have created this array to determine the length of the secret word
+                                                    //so...this array consists of the secret word jumbled up
+                                                    //I can use this as a means of controlling loop iterations
+
+    let loop = 0;
+    while(loop < wordLength-3){            //since we will add 1 letter each time we loop, this will loop the correct number of times - FOR NOW, NEEDS TO CHANGE
+
+
+
+        loop++;
+    }
+    console.log(secretWord);
+    console.log(triplets);
+}
+
+triplets1 = [
+  ['t','u','p'],
+  ['w','h','i'],
+  ['t','s','u'],
+  ['a','t','s'],
+  ['h','a','p'],
+  ['t','i','s'],
+  ['w','h','s']
+]
+
+recoverSecret(triplets1);
+
+//start with one of the triplets - add it to blank array that will be the word we are building
+//then find a triplet that shares at least 2 chars with the word we are building
 
 
 
 
+function dirReduc(arr){     //given an array of strings of directions, return a simplified array of directions with the needless ones removed
+    let directions = ["NORTH", "SOUTH", "EAST", "WEST"];
+    let oppDirections = ["SOUTH", "NORTH", "WEST", "EAST"];
 
+    do{
+    if(arr.indexOf("remove")>-1){
+        arr = arr.filter(function(element){
+            if(element!="remove"){
+                return element;
+            }
+        });     
+    }
+    for(let i=0;i<arr.length;i++){
+        let opp = oppDirections[directions.indexOf(arr[i])];
+        if(arr[i+1]==opp){
+            arr[i]="remove";
+            arr[i+1]="remove";
+            i++;
+        }
+    }        
+    }while(arr.indexOf("remove")>-1)
+    return arr;
+  }
+
+  dirReduc(["NORTH", "SOUTH", "EAST", "WEST", "EAST", "WEST"]);
+  
+  */
