@@ -1644,7 +1644,7 @@ function formatDuration (seconds) {
 // zeros(1000);
 // //console.log(zeros(100));
 
-
+*/
 
 function outputListOfPrimeNumbers(start,end){   //function that returns a list of all prime numbers between start and end
     function checkIfPrime(num){                 //function that returns true if number is prime, and false if number is not prime
@@ -1673,7 +1673,7 @@ function outputListOfPrimeNumbers(start,end){   //function that returns a list o
     //listOfPrimes = listOfPrimes.slice(0,listOfPrimes.length-2);     //slice the list to remove the tail ", "
     return listOfPrimes;
 }
-
+/*
 function factorize(ourNum){
     if(ourNum<0){
         ourNum*=-1;
@@ -1802,4 +1802,117 @@ function dirReduc(arr){     //given an array of strings of directions, return a 
 
   dirReduc(["NORTH", "SOUTH", "EAST", "WEST", "EAST", "WEST"]);
   
-  */
+  
+
+  //------------------------------------------------------REVISIT "Gap in Primes"--------------------------------------------------------------------------
+  function gap(gap,start,end){   //function that returns a list of all prime numbers between start and end
+    if(gap%2===1){
+        return null;
+    }
+    function checkIfPrime(num){                 //function that returns true if number is prime, and false if number is not prime
+        let numIsPrime;
+        if(num==1||num==2){
+            numIsPrime = true;                  //if num is 1 or 2, return true (it is prime)
+        }else{
+            for(let i=2;i<num;i++){
+                if(num%i==0){
+                    numIsPrime = false;         //if num is divisible by any number before it equally (no remainder), then num is automatically NOT PRIME
+                    break;
+                }else{
+                    numIsPrime = true;
+                }
+            }
+        }
+        return numIsPrime;
+    }
+
+    // function isPrime(num) {                  //tried with a different prime check, still didnt work
+    //     for(var i = 2; i < num; i++)
+    //       if(num % i === 0) return false;
+    //     return num > 1;
+    // }
+
+    //---------------------------------------------TAKES TOO LONG, TIMED OUT--------------------------------------------------------------------
+    let returnNull=true;
+    for(let i=start;i<=end||(i-start)>1000;i++){                //loop through all numbers between start and end inclusive
+        if(checkIfPrime(i)&&((i+gap)<end&&checkIfPrime(i+gap))){
+            let primes;
+                primes = [];
+                for(let j=i;j<=i+gap;j++){
+                    if(checkIfPrime(j)){
+                        primes.push(j);
+                    }    //TODO 
+  }
+                }
+            if(primes.length==2){
+              return primes;  
+            }
+        }
+    }
+    if(returnNull){
+        return null;
+    }
+
+    // //---------------------------------------------TAKES TOO LONG, TIMED OUT--------------------------------------------------------------------
+    // let pairOfPrimes=[];                        //declare blank string to store final list
+    // let returnNull;
+    // for(let i=start;i<=end;i++){                //loop through all numbers between start and end inclusive
+    //     if(checkIfPrime(i)){
+    //         pairOfPrimes.push(i);               //if the current number is prime, add it to the list
+    //     }
+    //     if(pairOfPrimes.length == 2){
+    //         //find gap
+    //         if((pairOfPrimes[1]-pairOfPrimes[0]) === gap){
+    //             returnNull = false;
+    //             return pairOfPrimes;
+    //         }else{
+    //             returnNull = true;
+    //             pairOfPrimes = [pairOfPrimes[1]];
+    //         }
+    //     }
+
+    // }
+    // if(returnNull){
+    //     return null;
+    // }
+}
+
+
+
+function validParentheses(parens){
+    parens = parens.split("");
+//console.log(parens);
+//console.log(parens.length);
+    if(parens[0]===")"||parens.length%2===1){           //if initial string consists of an uneven amount of parenthese ends, return false
+                                                        //if initial string starts with a right side parenthese, return false
+        return false;
+    }else{
+        const loopNum = parens.length/2;                //control number of loops, each iteration removes 2 so we must loop through it half the length
+        let indexLeft;
+        let indexRight;
+        for(let i=0;i<loopNum;i++){
+            indexLeft = parens.indexOf("(");            //index of first left par
+            indexRight = parens.indexOf(")");           //index of first right par
+//console.log({indexLeft}, {indexRight});
+            if(indexLeft>-1&&indexRight>-1){            //if the string contains both left and right then proceed, otherwise we should return false
+                parens.splice(indexLeft,1, 0);          //replace left with 0
+                parens.splice(indexRight,1, 0);         //replace right with 0
+                parens = parens.filter(function(element){   //remove both 0s
+                    if(element!==0){
+                        return element;
+                    }
+                });
+                if(parens[0]===")"){                    //after removal, if the starting element is a right par then return false
+                    return false;
+                }
+//console.log(parens);
+            }
+        }
+    }
+    if(parens.length>0){     //after all removals have been completed, if the array isnt empty, its false
+        return false;
+    }else{
+        return true;         //if all goes well and each left has a matching right, then resulting array should be empty, return true
+    }
+}
+*/
