@@ -1915,4 +1915,170 @@ function validParentheses(parens){
         return true;         //if all goes well and each left has a matching right, then resulting array should be empty, return true
     }
 }
+
+
+function pigIt(str){
+    str = str.split(" ");
+    str = str.map(function(word){
+        if(/[!?.,]/.test(word)){                        //if punctuation, return the punctuation unaltered
+            return word;
+        }
+        if(word.length===1){           //if single character word, return word plus "ay"
+            return word+"ay";
+        }else{              //otherwise, move first letter to end then add "ay"
+            word = word.split("");
+            word.push(word.splice(0,1),"ay");
+            word = word.join("");
+            return word;
+        }
+    });
+    return str.join(" ");
+}
+
+
+function solution(list){    //takes array of ints in increasing order and returns string of abbreviated list
+    let rangeArrs = [];
+    let tempArr = [];
+    for(let i=0;i<list.length;i++){
+        if(tempArr.length===0){
+            tempArr.push(list[i]);    
+        }
+        if(list[i+1]==(list[i]+1)){
+            tempArr.push(list[i+1]);
+        }else{
+            rangeArrs.push(tempArr);
+            tempArr = [];
+        }
+    }
+    rangeArrs = rangeArrs.map(function(arr){
+        if(arr.length>2){
+            return [arr[0],arr[arr.length-1]];
+        }else{
+            return arr;
+        }
+    });
+    let finalString = rangeArrs.reduce(function(acc,arr){
+        if(arr.length>1){
+            if(arr[1]-arr[0]===1){
+                return acc+arr[0]+","+arr[1]+",";
+            }else{
+                return acc+arr[0]+"-"+arr[1]+",";    
+            }
+        }else{
+            return acc+arr[0]+",";
+        }
+    },"");
+    return finalString.substring(0,finalString.length-1);
+}
+
+
+function maxSequence(arr){      //--------------------------------BRUTE FORCE ALGORITHM (tests all possible subarrays)---------------------------------
+    if(arr.every(function(num){return num<0})||arr.length===0){             //if array consists of ALL negatives or is empty, return 0
+        return 0;
+    }else if(arr.every(function(num){return num>0})){       //if array consists of ALL positives, return sum of all elements
+        return arr.reduce(function(acc,num){return acc+num},0);
+    }else{                                                  //if array consists of a MIX of pos/neg, return sum of elements of sub-array that yields the HIGHEST sum
+        let arrOfSubs = [];
+        for(let i=0;i<arr.length;i++){
+            for(let j=1;j<arr.length+1;j++){
+                arrOfSubs.push(arr.slice(i,j));
+            }
+        }
+        arrOfSubs = arrOfSubs.filter(function(arr){
+            if(arr.length>0){
+                return arr;
+            }
+        }).map(function(arr){
+            return {
+                array: arr,
+                sum: arr.reduce(function(acc,num){
+                    return acc+num;
+                },0)
+            };
+        }).sort(function(obj1, obj2){
+            if(obj1.sum>obj2.sum){
+                return -1;
+            }else if(obj2.sum>obj1.sum){
+                return 1;
+            }
+        });
+        return arrOfSubs[0].sum;
+    }
+}
+
+
+// function sumPairs(ints, s) {         //-------------------------------TOO SLOW--------------------------------------------------
+//     let secondVal = [];
+//     for(let i=0;i<ints.length;i++){
+//         if(secondVal.length===0||(secondVal.indexOf(ints[i])<0)){
+//             secondVal.push(s-ints[i]);
+//         }else{
+//             return [(s-ints[i]),ints[i]];
+//         }
+//     }
+// }
+
+
+// function randNumArr(numElem){       //function that returns an array of numElem length filled with random numbers between 0 and 100
+//     let myArray = [];
+//     for(let i=0;i<numElem;i++){
+//         myArray.push(Math.floor(Math.random() * 100));
+//     }
+//     return myArray;
+// }
+
+// function randSum(array){
+//     let index1 = Math.floor(Math.random() * 50);
+//     let index2;
+//     do{
+//         index2 = Math.floor(Math.random() * 50);
+//     }while(index2 != index1);
+//     return array[index1]+array[index2];
+// }
+// let testArray = randNumArr(50);
+// let sum = randSum(testArray);
+
+// console.log(testArray);
+// console.log(sum);
+
+
+function sumPairs(ints,s){      //------------------------------------------ALSO TOO SLOW-------------------------------------------------------------
+    let target = ints.length;
+
+    for(let i=0;i<ints.length;i++){
+        let tempIndex = ints.slice(i+1).indexOf(s-ints[i]);     //index of sum minus current element      
+        if(tempIndex>-1){
+            tempIndex += i + 1;
+        }
+        if(tempIndex>-1&&tempIndex<target){
+            target = tempIndex;
+        }
+    }
+    if(target == ints.length){
+        return undefined;
+    }else{
+        return [s-ints[target], ints[target]];
+    }
+}
+
+function humanReadable(seconds) {
+
+    let hours = Math.floor(seconds/3600).toString();
+    seconds = seconds%3600;
+    let minutes = Math.floor(seconds/60).toString();
+    seconds = (seconds%60).toString();
+    
+    if(hours.length === 1){
+        hours = "0"+hours;
+    }
+    if(minutes.length === 1){
+        minutes = "0"+minutes;
+    }
+    if(seconds.length === 1){
+        seconds = "0"+seconds;
+    }
+
+    return `${hours}:${minutes}:${seconds}`
+}
+
 */
