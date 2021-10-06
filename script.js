@@ -2081,4 +2081,1120 @@ function humanReadable(seconds) {
     return `${hours}:${minutes}:${seconds}`
 }
 
+
+
+let testArr = [];
+let obj1 = {
+    title: "harry potter",
+    author: "J.K Rowling",
+    pages: 34,
+    read: true
+};
+let obj2 = {
+    title: "bushcraft 101",
+    author: "dave canterbury",
+    pages: 204,
+    read:true
+};
+let obj3 = {
+    title: "maze runner",
+    author: "john doe",
+    pages: 258,
+    read:true
+};
+
+testArr.push(obj1,obj2,obj3);
+
+let indexNeeded = testArr.findIndex(function(book){
+    return book.title === "maze runner";
+});
+
+
+
+const personFactory = (name, age) => {          //factory function
+    const sayHello = () => console.log("Hello");
+    return {name, age, sayHello};
+};
+
+const jeff = personFactory("Jeff", 29);
+
+// console.log(jeff.name);
+// jeff.sayHello();
+
+const People = function(name, age){             //constructor function 
+    this.name = name;
+    this.age = age;
+    this.sayHello = function(){
+        console.log("Hello");
+    }
+}
+
+const greg = new People("Greg", 31);
+
+// console.log(greg.name);
+// console.log(greg.age);
+// greg.sayHello();
+
+let name = "Greg";
+let color = "blue";
+let number = 29;
+let food = "sushi";
+
+// console.log({name}, {color}, {number}, {food});
+// console.log({name, color, number, food});            //returns an object with property names that are identical to the variable names
+// console.log({name, favColor:color, age:number, favFood:food});       //this object will have 2 properties with altered names
+
+function testScope(){
+    let a = 17;         //global a
+
+    const funx = x => {
+        let a = x;      //a new a is declared...its local
+    };
+
+    funx(99);           //changes local a to 99 but doesn't alter global a
+
+    console.log(a);     //should return 17----------if you remove the "let" from within the funx, then that function will be altering the global a
+
+}
+
+function privateVarFunc(){
+
+    function FactoryFunction1(string){
+        const capitalizeString = () => string.toUpperCase();
+        const printString = () => console.log(`-----${capitalizeString()}-----`);
+        return { printString };
+    }
+
+    const FactoryFunction2 = string => {
+        const capitalizeString = () => string.toUpperCase();
+        const printString = () => console.log(`----${capitalizeString()}----`);
+        return { printString };
+    };
+
+    let taco1 = FactoryFunction1("test");
+    let taco2 = FactoryFunction2("test");
+
+    taco1.printString();
+    taco2.printString();
+
+    function counterCreator(){          //function that returns another function
+        let count = 0;
+        return function(){
+            console.log(count);
+            count++;
+        };
+    }
+
+    const counter = counterCreator();       //here we assign a function to the variable counter
+
+    let count = 0;
+    function counter2(){
+        console.log(count);
+        count++;
+    }
+
+    // counter();
+    // counter();
+    // counter();
+    // counter();
+    counter2();
+    counter2();
+    counter2();
+    counter2();
+    console.log(count);
+}
+
+
+const Person = (name) => {
+    const sayName = () => console.log(`my name is ${name}`);
+    return {sayName};
+};
+
+const Nerd = (name) => {
+    // simply create a person and pull out the sayName function with destructuring assignment syntax!
+    const {sayName} = Person(name);
+    const doSomethingNerdy = () => console.log('nerd stuff');
+    return {sayName, doSomethingNerdy};
+};
+  
+let test = Nerd("jeff");
+
+function testHello (){
+    console.log("this is a regular function that must be invoked by calling its name followed by parentheses");
+}
+
+testHello();
+
+let helloIIFE = function(){
+    console.log("helloIIFE is NOT a function, it is an IIFE...immediately invoked function expression");
+}();
+
+
+
+//----------------------------------------------MODULAR PROGRAMMING------------------------------------------------
+
+//use IIFE to get rid of global variables by wrapping the code in an IIFE that will remove its contents from the global scope
+
+let nonModule = function(){
+    return {
+        publicMethod1: function(){
+            console.log("not a module");
+        }
+    }
+}
+let myNonMod = nonModule();
+myNonMod.publicMethod1();
+nonModule().publicMethod1();
+
+
+
+let myModule = (function(){
+    "user strict";
+    //function code goes in here
+    let _privateProp = "this is private property";
+    let publicProp = "this is public";
+
+    function _privateMethod(){
+        console.log(_privateProp);
+    }
+
+    function publicMethod(){
+        _privateMethod();
+    }
+
+    return {
+        // publicMethod1: function(){
+        //     console.log("Hello, world! I am a module.");
+        //     _privateMethod();
+        // }
+        publicMethod: publicMethod,
+        publicProp: publicProp,
+    };
+})();
+
+myModule.publicMethod();
+console.log(myModule.publicProp);
+console.log(myModule._privateProp);     //returns undefined as the myModule object doesn't contain the property but rather it contains the method that can access the property
+//myModule._privateMethod();      //returns error for same reason as above
+
+
+
+
+function scramble(str1, str2) {
+    let result;
+    str1 = str1.split("");
+    str2 = str2.split("");
+
+    let i=0;
+    while(result != false && i<str2.length){
+        if(str1.indexOf(str2[i])>-1){
+            result = true;
+            str1.splice(str1.indexOf(str2[i]),1);
+        }else{
+            result = false;
+        }
+        i++;
+    }
+    return result;
+}   
+
+function scramble2(str1, str2) {
+    str1 = str1.split("").sort();
+    str2 = str2.split("").sort();
+
+    console.log(str1, str2);
+    return str2.every(function(currValue){
+        return (str1.indexOf(currValue)>-1);
+    });
+}   
+
+
+
+function rgb(r, g, b){  //convert rgb values to a single hex string
+    let hexResult = ""; //this will be our final hex result
+    let hexDigits = "0123456789ABCDEF".split("");   //this array contains all 16 of the hex digits 0-9 and A-F
+    for(let i=0;i<arguments.length;i++){            //this for loop ensures all rgb values are within the 0-255 range, if under 0, it becomes 0, if over 255, it becomes 255
+        if(arguments[i]<0){
+            arguments[i]=0;
+        } if(arguments[i]>255){
+            arguments[i]=255;
+        }
+    }
+    //run through each rgb within the arguments array and convert them to 2 digit hex values and then concatenate to the final result
+    for (let j=0;j<arguments.length;j++){
+        hexResult += hexDigits[Math.floor(arguments[j]/16)];
+        hexResult += hexDigits[arguments[j]%16];
+    }
+
+    return hexResult;
+}
+
+function decToBin(decNum){      //given a decimal number, return a string representing the binary number
+    if(decNum === 0){
+        return "0";
+    }else{
+    let binArr = [];    //store each binary bit
+    let binNum;         //this will store the binary number as a string to be returned at the end
+
+    while (decNum != 0){
+        binArr.unshift(decNum%2);
+        decNum = Math.floor(decNum/2);
+    }
+
+    binNum = binArr.join("");   
+    return binNum;        
+    }
+}
+
+//-------------------------------------------EASIER WAY TO CONVERT DECIMAL TO BINARY-------------------------------
+let decimalNum = 100;
+let binaryNumber = decimalNum.toString(2);          //this converts the decimal to base 2 number (binary)
+
+function binToDec(binNum){
+    let reversedBits = [];
+    let finalDecValue = 0;
+
+    let bits = binNum.split("").map(function(bitChar){      //split the binary string number into array fo integers (1s and 0s)
+        return parseInt(bitChar);
+    });
+
+    for(let i=0;i<bits.length;i++){                         //reverse the order of the binary digit array to make calculations easier
+        reversedBits.unshift(bits[i]);
+    }
+
+    for(let j=0;j<reversedBits.length;j++){                 //go through binary bit array and accumulate
+        let addThis = reversedBits[j] * Math.pow(2,j);
+        finalDecValue += addThis;
+    }
+    return finalDecValue;
+}
+
+
+
+
+//6kyu "Binaries"
+function code(strng) {
+    let binaryNums = strng.split("").map(function(char){    //split the string into array of chars, convert chars to integers, convert dec ints to binary num strings
+        return parseInt(char);
+    }).map(function(decNum){
+        if(decNum === 0){
+            return "0";
+        }else{
+        let binArr = [];    //store each binary bit
+        let binNum;         //this will store the binary number as a string to be returned at the end
+    
+        while (decNum != 0){
+            binArr.unshift(decNum%2);
+            decNum = Math.floor(decNum/2);
+        }
+    
+        binNum = binArr.join("");   
+        return binNum;        
+        }
+    });
+
+    let numOfBits = binaryNums.map(function(binNum){    //number of bits (binary digits) needed to represent the original decimal digits (this is the "k" in codewars instructions)
+        return binNum.length;
+    });
+
+    let codePartOne = numOfBits.map(function(numOfZeros){         //this array stores the results of steps a and b from the codewars instructions, (k-1) "0"'s followed by a "1"
+        let returnThis = "";
+        for(let i=0;i<numOfZeros-1;i++){
+            returnThis += "0";
+        }
+        returnThis += "1";
+        return returnThis;
+    });    
+
+    let semiFinalResult = [];
+
+    for(let i=0;i<codePartOne.length;i++){
+        let pushThis = codePartOne[i]+binaryNums[i];            //combine the numOfBits and binaryNums arrays
+        semiFinalResult.push(pushThis);
+    }
+
+    return semiFinalResult.join("");                            //final step: concat it all together to return a single long string
+
+
+}
+function decode(str) {      //given a string of 1's and 0's, decode the string and return a string of decimal digits
+    let finalString;
+    let arrOfBins = [];
+    let arrString = str.split("");
+
+    while(arrString.length>0){
+        let indexOf1 = arrString.indexOf("1");
+        let k = indexOf1+1;
+        let convertThis = arrString.splice(k,k).join("");
+        let removeThis = arrString.splice(0,k);
+        arrOfBins.push(convertThis);
+    }
+    
+    finalString = arrOfBins.map(function(binNum){
+        let reversedBits = [];
+        let finalDecValue = 0;
+    
+        let bits = binNum.split("").map(function(bitChar){      //split the binary string number into array fo integers (1s and 0s)
+            return parseInt(bitChar);
+        });
+    
+        for(let i=0;i<bits.length;i++){                         //reverse the order of the binary digit array to make calculations easier
+            reversedBits.unshift(bits[i]);
+        }
+    
+        for(let j=0;j<reversedBits.length;j++){                 //go through binary bit array and accumulate
+            let addThis = reversedBits[j] * Math.pow(2,j);
+            finalDecValue += addThis;
+        }
+        return finalDecValue;
+    }).join("");
+
+    return finalString;
+}
+
+
+
+function theJanitor(word) {     //given a string of lowercase letters, return an array consisting of 26 elements (each element represents a letter of the alphabet)
+    let alphabetArr = "abcdefghijklmnopqrstuvwxyz".split("");
+    let finalArr = [];
+
+    for(let i=0;i<26;i++){
+        if(word.indexOf(alphabetArr[i])===-1){
+            finalArr.push(0);
+        }else{
+            finalArr.push(word.lastIndexOf(alphabetArr[i])-word.indexOf(alphabetArr[i])+1);
+        }
+    }
+    return finalArr;
+}
+
+
+
+
+function christmasTree(height) {
+    let numStars = 1;
+    for(let i=0;i<height-1;i++){       //gives us total number of stars in the last row of the tree
+        numStars += 2;
+    }
+
+    let numSpaces = 0;
+    let finalOutput = [];
+
+
+    for(let j=0;j<height;j++){          //each loop will add a new element to the array, each element represents a row of the tree, use unshift
+        let row = "";
+        for(let i=0;i<numSpaces/2;i++){     //adds leading spaces/padding
+            row += " ";
+        }
+        for(let j=0;j<numStars;j++){        //adds stars
+            row += "*";
+        }
+        for(let k=0;k<numSpaces/2;k++){     //adds trailing spaces/padding
+            row += " ";
+        }
+        numStars -= 2;                      //each row going towards the top of the tree has 2 less stars
+        numSpaces += 2;                     //and 2 more spaces
+        finalOutput.unshift(row);           
+    }
+
+    finalOutput = finalOutput.join("\n");
+    return finalOutput;
+}
+
+
+console.log(christmasTree(50));
+
+
+
+function solution(number){      //given a number, return the sum of all smaller numbers that are multiples of 3 or 5 (if multiple of both, count once) 
+ 
+    if(number<0){
+        return 0;
+    }else{
+        let sum = 0;
+        for(let i=number-1;i>0;i--){
+            if(i%3===0||i%5===0){
+                sum += i;
+            }
+        }
+        return sum;
+    }
+}
+
+function findOdd(A) {       //given an array of integers (A), return the ONE integer that appears an OOD NUMBER OF TIMES in the array
+    A = A.sort();           //sort array in ascending order to get all like values grouped together
+    while(A.length>0){
+        let amount = A.lastIndexOf(A[0])+1;     //looking at the integer in index 0, this gives us the quantity of that integer in our array
+        if(amount%2===1){                       //if the quantity is odd, return that integer
+            return A[0];
+        }else{                                  //if the quanitity is even, splice out all appearences of that integer and repeat
+            A.splice(0,amount);
+        }
+    }
+}
+
+
+
+function digital_root(n) {      //given an integer n, return sum of its individual digits. If the sum consists of more than 1 digit, continue until sum is a single digit. 
+    let sum;                                                
+    do{
+        n = n.toString().split("").map(function(element){   //split the int n into an array of int digits
+            return parseInt(element);
+        });
+        sum = n.reduce(function(acc, curr){                 //find sum of all the digits
+            return acc+curr;
+        },0);
+        n = sum;                                            //set n to the calculated sum in case we have to go back and repeat the process
+    }while(sum>9)                                           //if the sum is greater than 9 (not a single digit sum), repeat from the top
+
+    return sum;
+}
+
+
+
+function likes(names) {     //given an array of names, return a string in the proper format displaying who liked the post
+    if(names.length === 0){
+        return "no one likes this";
+    }else if(names.length === 1){
+        return names[0]+" likes this";
+    }else if(names.length === 2){
+        return names[0]+" and "+names[1]+" like this";
+    }else if(names.length === 3){
+        return `${names[0]}, ${names[1]} and ${names[2]} like this`;
+    }else{
+        return `${names[0]}, ${names[1]} and ${names.length-2} others like this`;
+    }
+}
+
+
+
+function duplicateCount(text){      //given a string, return an int that indicates the number of characters that occur more than once throughout the sting
+    let finalResult = 0;
+    text = text.toLowerCase().split("").sort();
+    console.log(text);
+
+    while(text.length>0){
+        let amount = text.lastIndexOf(text[0])+1;     //looking at the integer in index 0, this gives us the quantity of that integer in our array
+        if(amount>1){                       //if the quantity is more than 1, add 1 to our final result
+            finalResult++;
+        }
+        text.splice(0,amount);              //after checking the first element, splice the array so that it does not contain anymore of those chars
+    }
+    return finalResult;
+}
+
+
+
+function findOutlier(integers){     //given an array of integers containing either all evens or all odds (except for one), return the outlier
+//determine if the array contains mostly evens or mostly odds by checking elements 1 and 2 (if they dont match, check element 3)
+    let contents;                               //contents==0 means evens, contents==1 means odds
+    if(Math.abs(integers[0]%2)===Math.abs(integers[1]%2)){          //use Math.abs to find absolute value of the modulus in order to compare negatives and positives
+        contents = Math.abs(integers[0]%2);
+    }else{
+        contents = Math.abs(integers[2]%2);
+    }
+console.log(contents);
+//loop through array and find the one int that is opposite to contents
+    for(let i=0;i<integers.length;i++){
+        if(Math.abs(integers[i]%2)!==contents){
+            return integers[i];
+        }
+    }
+}
+
+
+
+function duplicateEncode(word){     //given a string of characters, return another string containing just "("s and ")"s 
+        word = word.toLowerCase().split("");
+        let finalString = word.map(function(character){
+            if(word.indexOf(character)!==word.lastIndexOf(character)){      //if the character appears more than once in the string, represent it with a ")"
+                return ")"
+            }else{
+                return "("                                                  //if the character only appears once in the string, represent it with a "(" in the new string
+            }
+        });
+        return finalString.join("");
+}
+
+
+
+function arrayDiff(a, b) {      //given two arrays, remove all elements of b that are found in a and return
+    for(let i=0;i<b.length;i++){            //going through each element of b
+        a = a.filter(function(elem){        //filter through a so that it no longer contains the element from b
+            if(elem !== b[i]){
+                return elem;
+            }
+        })
+    }    
+    return a;
+}
+
+
+
+var countBits = function(n) {       //given a decimal integer, return the number of 1s found in its binary representation
+    let numOf1s = function(decNum){      //given a decimal number, return a string representing the binary number
+        if(decNum === 0){
+            return "0";
+        }else{
+        let binArr = [];    //store each binary bit
+        let binNum;         //this will store the binary number as a string to be returned at the end
+    
+        while (decNum != 0){
+            binArr.unshift(decNum%2);
+            decNum = Math.floor(decNum/2);
+        }
+    
+        binNum = binArr.join("");   
+        return binNum;        
+        }
+    }(n).split("").filter(function(bit){            //convert decimal int to binary string, split to bits, filter out all the 0s, leave the 1s, find length
+        if(bit==="1"){
+            return bit;
+        }
+    }).length;
+
+    return numOf1s;
+};
+
+
+
+function isValidWalk(walk) {        //given an array representing a walk (list of directions), return true if the walk will take exactly 10 minutes and bring you back to the starting position
+//in order to finish the walk at the same point it was started, each "n" must have an opposite "s", and each "w" must have an opposite "e"
+//in order to last a total of 10 minutes, the length of the array must be 10 elements, as each block takes one minute to traverse
+    if(walk.length !== 10){
+        return false;
+    }else{
+        let numOfEast = walk.filter(function(dir){
+            if(dir === "e"){
+                return dir;
+            }
+        });
+        let numOfWest  = walk.filter(function(dir){
+            if(dir === "w"){
+                return dir;
+            }
+        });;
+        let numOfNorth  = walk.filter(function(dir){
+            if(dir === "n"){
+                return dir;
+            }
+        });;
+        let numOfSouth  = walk.filter(function(dir){
+            if(dir === "s"){
+                return dir;
+            }
+        });;
+
+        if(numOfEast.length===numOfWest.length&&numOfNorth.length===numOfSouth.length){
+            return true;
+        }else{
+            return false;
+        }
+    }
+}
+
+
+
+function tribonacci(signature,n){   //given a signature and int n, return an array of the first n elements in the tribonacci (sum of previous 3) sequence
+    if(n === 0){
+        return [];
+    }else if(n===1||n===2||n===3){  //since we already have the first 3 elements of the sequence, if n=1,2,or 3, just return the sub-array needed
+        return signature.slice(0,n)
+    }else{
+        for(let i=3;i<n;i++){       //for n larger than 3, we must first calculate the continuation of the pattern: each element is the sum of the previous 3
+            signature.push(signature[i-3]+signature[i-2]+signature[i-1]);
+        }
+        return signature;
+    }
+}
+
+
+
+function digPow(n, p){      //return k....k = (a^p+b^(p+1)+c^(p+2)....)/n
+    let sum = 0;        //represents a^p+b^(p+1)+c^(p+2)....
+    let digitsOfN = n.toString().split("").map(function(char){
+        return parseInt(char);
+    });
+    for(let i=0;i<digitsOfN.length;i++){
+        sum += Math.pow(digitsOfN[i],p);
+        p++;
+    }
+    let k = sum/n;
+    if(Number.isInteger(k)){
+        return k;
+    }else{
+        return -1;
+    }
+}
+
+
+
+var decodeMorse = function(morseCode){  //given a string of dots and dashes (letters seperated by 1 space and words seperated by 3 spaces), decode and return
+    while(morseCode[0]===" "){              //gets rid of leading spaces
+        morseCode = morseCode.substring(1);
+    }
+    while(morseCode[morseCode.length-1]===" "){     //gets rid of trailing spaces
+        morseCode = morseCode.substring(0,morseCode.length-1);
+    }
+    let finalResult = "";
+    let translation = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890,.?\":'-/()".split("");
+        translation = [...translation, "SOS", "!"];
+    let code = [".-", "-...", "-.-.", "-..", ".", "..-.", "--.", "....", "..", ".---", "-.-", ".-..", "--", "-.", "---", ".--.", "--.-", ".-.", "...", "-", "..-", "...-"];
+        code = [...code, ".--", "-..-", "-.--", "--..", ".----", "..---", "...--", "....-", ".....", "-....", "--...", "---..", "----.", "-----", "--..--", ".-.-.-"];
+        code = [...code, "..--..", ".-..-.", "---...", ".----.", "-....-", "-..-.", "-.--.", "-.--.-", "...---...", "-.-.--"];
+
+    let words = morseCode.split("   ");         //split the given string into an array of words
+    words = words.map(function(word){           //split each word into an array of letters, thus resulting in an array of arrays
+        return word.split(" ");
+    });
+
+    for(let i=0;i<words.length;i++){            //i will reference the words
+        for(let j=0;j<words[i].length;j++){     //j will reference the letters
+            finalResult += translation[code.indexOf(words[i][j])]
+        }
+        finalResult += " ";
+    }
+    
+    return finalResult.substring(0,finalResult.length-1);
+}
+
+
+
+var decodeBits = function(bits){    //given a string of 1s and 0s, determine transmission rate (number of 1s per dot and number of 1s per dash) then return string of dots/dashes
+//---------------------------------------------------------------CLEAR LEADING AND FOLLOWING ZEROS----------------------------------------
+    while(bits[0]==="0"){              //gets rid of leading zeros
+        bits = bits.substring(1);
+    }
+    while(bits[bits.length-1]==="0"){     //gets rid of trailing zeros
+        bits = bits.substring(0,bits.length-1);
+    }
+//--------------------------------------------------------------FIND X (ONE UNIT OF TIME)------------------------------------------
+    let oneUnitOfTime;
+    if(bits.indexOf("0")===-1){                                 //no 0s in bits string
+        oneUnitOfTime = bits.length;
+    }else{                                                      //both 1s and 0s in bits string
+        oneUnitOfTime = [...bits.match(/1+/g),...bits.match(/0+/g)].map(function(elem){
+            return elem.length;
+        }).sort(function compareNumbers(a, b) {
+            return a - b;
+          })[0]; //
+    }
+//------------------------------------------ESTABLISH REPRESENTATIONS OF DOTS/DASHES/BETWEEN DOTS&DASHES/BETWEEN CHARS/BETWEEN WORDS---------------
+    let dot="";
+    let betweenDandD="";
+        for(let i=0;i<oneUnitOfTime;i++){
+            dot += "1";
+            betweenDandD += "0";
+        }
+    let dash="";
+    let betweenChars="";
+        for(let i=0;i<(oneUnitOfTime*3);i++){
+            dash += "1";
+            betweenChars += "0";
+        }
+    let betweenWords="";
+        for(let i=0;i<(oneUnitOfTime*7);i++){
+            betweenWords += "0";
+        }
+//--------------------------------------------------THIS SEEMS TO WORK BUT CODEWARS DIDNT ACCEPT-----------------------------------------------------
+    // return bits.replaceAll(betweenWords,"   ").replaceAll(dash,"-").replaceAll(betweenChars," ").replaceAll(dot,".").replaceAll(betweenDandD,"");
+
+//-----------------------------------ISOLATE EACH DOT AND DASH BY SEPERATING BY WORDS, THEN CHARACTERS, AND FINALLY DOTS AND DASHES-----------------
+    let words = bits.split(betweenWords).map(function(word){
+        return word.split(betweenChars);
+    }).map(function(word){
+        word = word.map(function(char){
+            return char.split(betweenDandD);
+        });
+        return word;
+    });
+//--------------------------------LOOP THROUGH THE TRIPLE NESTED ARRAY AND REPLACE THE 1S AND 0S WITH DOTS/DASHES APPROPRIATELY-----------------------
+    let dotsAndDashes = "";
+    for(let i=0;i<words.length;i++){
+        for(let j=0;j<words[i].length;j++){
+            for(let k=0;k<words[i][j].length;k++){
+                if(words[i][j][k]===dot){
+                    dotsAndDashes += ".";
+                }else if(words[i][j][k]===dash){
+                    dotsAndDashes += "-";
+                }
+            }
+            dotsAndDashes += " ";
+        }
+        dotsAndDashes += "  ";
+    }
+//------------------------------------REMOVE THE TAILING SPACES ADDED BY THE FINAL LOOP ITERATION ABOVE----------------------------------------------
+    return dotsAndDashes.substring(0,dotsAndDashes.length-3);
+}
+
+// console.log(decodeMorse(decodeBits('1100110011001100000011000000111111001100111111001111110000000000000011001111110011111100111111000000110011001111110000001111110011001100000011')));
+// console.log(decodeMorse(decodeBits('11111111111111100000000000000011111000001111100000111110000011111000000000000000111110000000000000000000000000000000000011111111111111100000111111111111111000001111100000111111111111111000000000000000111110000011111000001111111111111110000000000000001111100000111110000000000000001111111111111110000011111000001111111111111110000011111000000000000000111111111111111000001111100000111111111111111000000000000000000000000000000000001111111111111110000011111000001111100000111110000000000000001111100000111111111111111000001111100000000000000011111111111111100000111111111111111000001111111111111110000000000000001111100000111111111111111000001111111111111110000000000000001111111111111110000011111000000000000000000000000000000000001111100000111110000011111111111111100000111110000000000000001111111111111110000011111111111111100000111111111111111000000000000000111111111111111000001111100000111110000011111111111111100000000000000000000000000000000000111110000011111111111111100000111111111111111000001111111111111110000000000000001111100000111110000011111111111111100000000000000011111111111111100000111111111111111000000000000000111110000011111111111111100000111111111111111000001111100000000000000011111000001111100000111110000000000000000000000000000000000011111111111111100000111111111111111000001111111111111110000000000000001111100000111110000011111000001111111111111110000000000000001111100000000000000011111000001111111111111110000011111000000000000000000000000000000000001111111111111110000000000000001111100000111110000011111000001111100000000000000011111000000000000000000000000000000000001111100000111111111111111000001111100000111110000000000000001111100000111111111111111000000000000000111111111111111000001111111111111110000011111000001111100000000000000011111111111111100000111110000011111111111111100000111111111111111000000000000000000000000000000000001111111111111110000011111000001111100000000000000011111111111111100000111111111111111000001111111111111110000000000000001111111111111110000011111111111111100000111110000000000000001111100000111111111111111000001111100000111111111111111000001111100000111111111111111')));
+
+
+
+function findEvenIndex(arr){    //given an array of ints, find the index at which the sum of the elements to the left of it are equal to that of the elements to the right
+    let leftSum;
+    let rightSum;
+    let index=0;
+    if(arr.length===1){                 //array with one element (at index 0) will have a sum of 0 on either side, thus answer is index 0
+        return 0;
+    }else{
+        for(;index<arr.length;index++){
+            if(index===0){              //array with more than 1 element, at index 0, sum of left is 0
+                leftSum = 0;
+                rightSum = arr.slice(index+1,arr.length).reduce(function(acc,curr){
+                    return acc+curr;
+                });
+            }
+            else if(index===arr.length-1){  //array with more than 1 element, at last index, sum of right is 0
+                rightSum = 0;
+                leftSum = arr.slice(0,index).reduce(function(acc,curr){
+                    return acc+curr;
+                });
+            }
+            else{
+                leftSum = arr.slice(0,index).reduce(function(acc,curr){
+                    return acc+curr;
+                });
+                rightSum = arr.slice(index+1,arr.length).reduce(function(acc,curr){
+                    return acc+curr;
+                });            
+            }        
+
+            if(leftSum === rightSum){
+                break;
+            }
+        }
+        if(index===arr.length){         //if no index works, return -1
+            return -1;
+        }else{
+            return index;        
+        }    
+    }
+}
+
+
+
+function iqTest(numbers){   //given a string of ints seperated by spaces, return the position of the one that differs in evenness from the rest
+    numbers = numbers.split(" ").map(function(string){          //this will seperate the string into an array of ints
+        return parseInt(string);
+    });
+    let arrEvenness;                                            
+    if(numbers[0]%2===numbers[1]%2){                            //here we determine that majority evenness of the array, either mostly odd or mostly even
+        arrEvenness = numbers[0]%2;
+    }else{
+        arrEvenness = numbers[2]%2;
+    }
+    let i=0;
+    for(;i<numbers.length;i++){                                 //compare the elements to the array's evenness, once we reach one that doesn't match, break out
+        if(numbers[i]%2!==arrEvenness){
+            break;
+        }
+    }
+    return i+1;                                                 //return that index+1 because we want the position in the original string (start count at 1, not 0)
+}
+
+
+
+var uniqueInOrder=function(iterable){   //given a string or array sequence, return an array listing elements in the same order but without duplicates side by side
+    if(iterable.length===0){
+        return [];
+    }else{
+        if(typeof iterable === "string"){
+            iterable = iterable.split("");      //if given a string, split into an array
+        }
+        let finalArray = [iterable[0]];                    //this will house our final answer
+        for(let i=1;i<iterable.length;i++){
+            if(iterable[i]!==finalArray[finalArray.length-1]){      //going through each element of the given array, if the current element does not match the last element
+                finalArray.push(iterable[i]);                       //of our finalArray, then push it onto the finalArray as it is a unique element
+            }
+        }
+        return finalArray;        
+    }
+}
+
+
+
+function tickets(peopleInLine){     //given an array of ints (25, 50, or 100) representing dollars paid by customers, return YES if the clerk will have enough change
+                                    //to sell 25 dollar tickets to each customer in the order they are lined up
+//------keep track of the number of each paper bills----------
+    let bills25 = [];
+    let bills50 = [];
+    let bills100 = [];
+    let changeNeeded = 0;
+    let answer = "YES";
+
+    for(let i=0;i<peopleInLine.length;i++){
+        changeNeeded = peopleInLine[i]-25;      //determine total change needed
+
+        if(changeNeeded===0){                   //if no change is needed, add paid amount to cash register and continue to next person in line
+            bills25.push(25);
+        }else{
+            if(changeNeeded===25){              //if person pays with a 50, we owe them 25
+                if(bills25.length>0){           //if we have at least 1 25 dollar bill, we can provide change
+                    bills25.pop();              //remove one 25 from our cash register
+                    bills50.push(50);           //and add one 50 to our cash register
+                }else{
+                    answer = "NO";
+                    break;
+                }
+            }
+            if(changeNeeded===75){                              //if person pays with a 100 dollar bill, we owe them 75 in change
+                if(bills25.length>=1&&bills50.length>=1){       //if we have 1 50 and 1 25, remove and replace with the 100
+                    bills50.pop();
+                    bills25.splice(0,1);
+                    bills100.push(100);
+                }else if(bills25.length>=3){                    //if we do not, check to see if we have 3 25 bills, remove and replace
+                    bills25.splice(0,3);
+                    bills100.push(100);
+                }else{                                          //else, return "NO"
+                    answer = "NO";
+                    break;
+                }
+            }
+        }
+    }
+    return answer;
+}
+
+
+
+function toCamelCase(str){  //given a string with words seperated by either "-" or "_", covert the string toCamelCase
+    if(str === ""){
+        return "";
+    }else{
+        str = str.split("");
+        while(str.indexOf("-")>-1){                 //find index of "-", remove it (this will shift everything down 1 index), then capitalize the letter in its place
+            let index = str.indexOf("-");
+            str.splice(index,1);
+            str[index]=str[index].toUpperCase();
+        }   
+        while(str.indexOf("_")>-1){                 //do same as above for "_" instead
+            let index = str.indexOf("_");
+            str.splice(index,1);
+            str[index]=str[index].toUpperCase();  
+        }
+        return str.join("");
+    }
+}
+
+console.log(toCamelCase("the_stealth_warrior"));
+
+
+
+function queueTime(customers, n) {      //"customers" = array of integers, the order represents the order in which the customers have lined up, and each integer represents
+                                        //how long that customer takes to complete their transaction. "n" is an integer that specifies the number of registers open at the
+                                        //time. The function must determine how long it'll take for all of the customers to finish up
+//store total time in a variable and increment as you go
+//have a seperate with "n" amount of elements
+//as soon as the fastest person finishes, decrement the other times by that persons time
+//and then replace the fastest person with the next person in line
+//continue until "customers" array is empty
+    if(customers.length === 0){
+        return 0;
+    }
+    else{    
+        let totalTime = 0;
+        let registers = customers.splice(0,n);
+        while(customers.length>0){
+            registers = registers.sort(function(a,b){       //sort the ints within registers in ascending order as we will be removing the smallest and replacing with another customer
+                if(a<b){
+                    return -1;
+                }else{
+                    return 1;
+                }
+            });
+            let quickestTime = registers[0];                 //determine fastest customer (this should be integer in index 0)
+            totalTime += quickestTime;                      //add this time (minutes) to our totalTime variable
+            registers = registers.map(function(element){    //update the registers array by subtracting the quickest time from all of the elements
+                return element - quickestTime;
+            });
+            while(registers.indexOf(0)>-1){                 //replace all 0s with new elements by shifting from customers array
+                registers[registers.indexOf(0)] = customers.shift();
+            }
+        }
+        registers = registers.sort(function(a,b){       //sort the ints within registers in ascending order
+            if(a<b){
+                return -1;
+            }else{
+                return 1;
+            }
+        }).filter(function(element){                    //filter out any possible "undefined" elements that could have possibly been added by the shift()
+            if(element !== undefined){
+                return element;
+            }
+        });      
+        totalTime += registers[registers.length-1];     //last int we will add is the largest int in the final regsiters array
+        return totalTime;
+    }
+}
+
+
+function findNb(m) {        //codewars kata - "build a pile of Cubes"
+    let i = 1;
+    while(m>0){
+        m -= Math.pow(i,3);
+        i++;
+    }
+    if(m === 0){
+        return i-1;
+    }else{
+        return -1;
+    }
+}
+
+
+function comp(array1, array2){  //given two arrays, return true if array2 contains all elements of array1 taken to the second power, order doesn't matter
+    console.log({array1,array2});
+    if(array1==null||array2==null){       //if either array is null, return false
+        return false;
+    }else{
+        if(array1.length>0){            //as long as the array has a length greater than 0, sort them first
+            array1 = array1.sort(function(a,b){     //sort array1 in ascending order to make comparing easier
+                if(a<b){
+                    return -1;
+                }else{
+                    return 1;
+                }
+            });
+            array2 = array2.sort(function(a,b){     //sort array2 in ascending order to make comparing easier
+                if(a<b){
+                    return -1;
+                }else{
+                    return 1;
+                }
+            });            
+        }        
+        for(let i=0;i<array1.length;i++){       //if element in array2 does not equal to the element in array1 squared, return false
+            if(array2[i]!==Math.pow(array1[i],2)){
+                return false;
+            }
+        }
+        return true;                            //if all of the elements meet the criteria, return true
+    }
+}
+
+
+function sortArray(array) {    //given array of numbers, sort all odd numbers in ascending order while leaving the even numbers in their original position
+    if(array.length===0){
+        return array;
+    }else{
+        let oddNumbers = array.filter(function(number){     //create an array of the sorted odd numbers from original array
+            if(number%2===1||number%2===-1){
+                return number;
+            }
+        }).sort(function(a,b){
+            if(a<b){
+                return -1;
+            }else{
+                return 1;
+            }
+        });
+        array = array.map(function(number){             //loop through original array, if number is odd, replace with oddNumbers.shift() - odd numbers will be in ascending order
+            if(number%2===1||number%2===-1){
+                return oddNumbers.shift();
+            }else{
+                return number;
+            }
+        });
+        return array;       
+    }
+}
+
+
+
+function differentiate(equation, point){        //differentiat the equation and solve for point
+    //----------------------------------FUNCTIONS--------------------------------
+    function splitStringAtIndices(string, arrayOfIndices){
+        let outPutArray = [];
+    
+        for(let i=0;i<arrayOfIndices.length;i++){
+            outPutArray.push(string.substring(arrayOfIndices[i],arrayOfIndices[i+1]));
+        }
+    
+        return outPutArray;
+    }
+
+    function findDerivative(term){      //given an individual term from a polynomial, return its derivative
+        if(term.indexOf("^")>-1){       //check to see if the term has a caret character within, this means there is an exponent
+            if(term[0]==="x"){
+                term = "1"+term;
+            }
+            let xIndex = term.indexOf("x");
+            let caretIndex = term.indexOf("^");
+            let exp = parseInt(term.substring(caretIndex+1));
+            let coeff = term.substring(0,xIndex);
+                if(coeff==="-"){
+                    coeff = -1;
+                }else if(coeff==="+"){
+                    coeff = 1;
+                }else{
+                    coeff = parseInt(coeff);
+                }
+            let newCoeff = exp*coeff;
+            let newExp = exp-1;
+            let newTerm;
+            if(newExp===1){
+                newTerm = `${newCoeff}x`;
+            }else{
+                newTerm = `${newCoeff}x^${newExp}`;
+            }
+            return newTerm;
+        }else{                          //if there is no caret character, simply return the integer to the left of the variable "x"
+            if(term.length>1){
+                return term.substring(0,term.length-1); //if term is "__x", return the coefficient in front of x
+            }else{
+                return 1;           //if term is just "x", return 1
+            }
+        }
+    }
+
+    function solveForX(term){       //plug in the "point" in place of the "x" and return the resulting value 
+        term = term.toString();
+        let xIndex = term.indexOf("x");
+        let caretIndex = term.indexOf("^");
+        let exp = parseInt(term.substring(caretIndex+1));
+        let coeff = parseInt(term.substring(0,xIndex));
+        if(xIndex===-1){             //term does not have an "x"
+            if(term==="-"){
+                return -1;
+            }else if(term==="+"){
+                return 1;
+            }else{
+                return parseInt(term);
+            }
+        }else if(caretIndex===-1){       //term does not have an exponent
+            return coeff*point;
+        }else{
+            return coeff*Math.pow(point,exp);
+        }
+    }
+    //---------------------------------------------------------------------------
+    let equationChars = equation.split("");
+    let operatorIndices = [-1];   //stores the indices of the operators (+/-)
+        for(let i=1;i<equationChars.length;i++){
+            if(equationChars[i]==="+"||equationChars[i]==="-"){
+                operatorIndices.push(i);
+            }
+        }
+
+    let termsArr = splitStringAtIndices(equation,operatorIndices);  //stores the separate terms of the polynomial
+        termsArr = termsArr.filter(function(element){               //filters OUT any terms that do not contain the variable "x" as these are not needed since they differentiate to 0
+            if(element.indexOf("x")>-1){            //||element==="+"||element==="-"
+                return element;
+            }
+        });
+
+    let derivativeArr = termsArr.map(findDerivative);
+    let productsArr = derivativeArr.map(solveForX);
+    let finalAnswer = productsArr.reduce(function(prev, curr){
+        return prev+curr;
+    })
+
+    return finalAnswer;
+}
+
+console.log(differentiate("-x^2+3x-3", 1234567908));            
+
 */
+
